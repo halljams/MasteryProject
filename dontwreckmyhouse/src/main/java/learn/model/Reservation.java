@@ -1,5 +1,6 @@
 package learn.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Reservation {
@@ -7,8 +8,9 @@ public class Reservation {
     private LocalDate startDate;
     private LocalDate endDate;
     private Guest guestEmail;
-    private Guest guest;
+    private Guest guestName;
     private Host host;
+    private BigDecimal total;
 
     public LocalDate getStartDate() {
         return startDate;
@@ -46,18 +48,29 @@ public class Reservation {
 
 
     public Guest getGuest() {
-        return guest;
+        return guestName;
     }
 
-    public void setGuest(Guest guest) {
-        this.guest = guest;
+    public void setGuest(Guest guestName) {
+        this.guestName = guestName;
     }
 
     public Host getHost() {
         return host;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
     public void setHost(Host host) {
         this.host = host;
+    }
+
+    public void setGuest(String valueOf) {
     }
 }

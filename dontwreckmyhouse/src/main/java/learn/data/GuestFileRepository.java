@@ -2,21 +2,19 @@ package learn.data;
 
 import learn.model.Guest;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class GuestFileRepository implements GuestRepository{
     private final String filePath;
-    private static String header = "id,firstname,lastname,email";
+    private static final String HEADER = "id,firstname,lastname,email";
 
     public GuestFileRepository(String filePath) {
         this.filePath = filePath;
     }
-
+    @Override
     public List<Guest> findAll() {
         ArrayList<Guest> result = new ArrayList<>();
         try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -32,11 +30,15 @@ public class GuestFileRepository implements GuestRepository{
         }
         return result;
     }
+    @Override
     public List<Guest> findByEmail(String guestEmail) {
         return findAll().stream()
                 .filter(i -> i.getGuestEmail().equalsIgnoreCase(guestEmail))
                 .collect(Collectors.toList());
     }
+
+//    public Guest findById(int id) {
+//    }
 
     private String serialize(Guest guest) {
         return String.format("%s,%s,%s,%s",
@@ -53,5 +55,18 @@ public class GuestFileRepository implements GuestRepository{
         result.setLastName(fields[2]);
         result.setGuestEmail(fields[3]);
         return result;
+    }
+
+    private void writeALl(List<Guest> guests) throws DataException {
+        try (PrintWriter writer = new PrintWriter(filePath)) {
+            writer.println(HEADER);
+            for (Guest name : guests) {
+                writer.println(serialize(name));
+            }
+        }catch (FileNotFoundException ex) {
+            throw new DataException(ex);
+        }
+
+
     }
 }
