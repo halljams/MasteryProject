@@ -98,7 +98,7 @@ src
 │               │
 │               ├───models
 │               │       Reservation.java                -- date-range / guest / host
-│               │       Guest.java                      -- id/gname/email
+│               │       Guest.java                      -- reservationId/gname/email
 │               │       Host.java                       -- email /location/rent
 │               │
 │               │
@@ -143,8 +143,8 @@ Custom data layer exception.
 
 ### data.ReservationFileRepository
 - `private String filePath`
-- `private Header` --  id,date-range,guest,guest email
-- `public List<Reservation> findbyHost(String)` -- finds all Reservations by host email id, uses the private `
+- `private Header` --  reservationId,date-range,guest,guest email
+- `public List<Reservation> findbyHost(String)` -- finds all Reservations by host email reservationId, uses the private `
   ` method
 - `public Reservation add(Reservation)` -- create a Reservation
 - `public boolean update(Reservation)` -- update a Reservation
@@ -164,10 +164,10 @@ Contract for ReservationFileRepository and ReservationRepositoryTestDouble.
 
 ### data.GuestFileRepository
 -`private String filePath`
--`private String Header` - id/firstname/lastname/email
+-`private String Header` - reservationId/firstname/lastname/email
 -`public List<Guest> findAll()` - find all guests
 -`public List<Guest> findbyGuestEmail(String email)` - locate guest through email
--`private String serialize(Guest guest)` - get id/name/name/email
+-`private String serialize(Guest guest)` - get reservationId/name/name/email
 -`private Guest deserialize(String[] fields)` - set ^ in proper indexes
 
 ### data.GuestRepository (interface)
@@ -177,7 +177,7 @@ Contract for ReservationFileRepository and ReservationRepositoryTestDouble.
 ### data.HostFileRepository
 -`private String filePath`
 -`private String Header`- email, location, rentperday
--`public List<Host> findByEmailHost(String host)` - find info through email id
+-`public List<Host> findByEmailHost(String host)` - find info through email reservationId
 -`private String serialize(Host host)` - email/location/rent
 -`private Host deserialize(String[] fields)` - set ^ in proper indexes
 
@@ -218,13 +218,13 @@ Contract for ReservationFileRepository and ReservationRepositoryTestDouble.
 - `private rentPerDay(BigDecimal rent, LocalDate day)`
 
 ### model.Reservation
-- `private String id`
+- `private String reservationId`
 - `private Locale Date range`
 - `private String Guest name`
 - `private String guest email`
 
 ### model.Guest
-- `private String id` - get/set
+- `private String reservationId` - get/set
 - `private String first name` - get/set
 - `private String last name` - get/set
 - `private String guest email` - get/set

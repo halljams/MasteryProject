@@ -43,9 +43,9 @@ public class Controller {
                     break;
                 case CANCEL_RESERVATION:
                     cancelReservation();
-                    break;;
+                    break;
             }
-        }while (option!= MainMenuOption.EXIT)
+        }while (option!= MainMenuOption.EXIT);
     }
 
     private void viewByHost() {

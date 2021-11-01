@@ -1,18 +1,18 @@
 package learn.model;
 
 public class Guest {
-    private int id;
+    private int guestId;
     private String firstName;
     private String lastName;
     private String guestEmail;
 
 
-    public int getId() {
-        return id;
+    public int getGuestId() {
+        return guestId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setGuestId(int guestId) {
+        this.guestId = guestId;
     }
 
     public String getFirstName() {

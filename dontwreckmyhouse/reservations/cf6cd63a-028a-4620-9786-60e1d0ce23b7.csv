@@ -1,4 +1,4 @@
-id,start_date,end_date,guest_id,total
+reservationId,start_date,end_date,guest_id,total
 1,2021-12-28,2021-12-29,176,144
 2,2021-08-17,2021-08-19,133,288
 3,2021-09-06,2021-09-10,783,576

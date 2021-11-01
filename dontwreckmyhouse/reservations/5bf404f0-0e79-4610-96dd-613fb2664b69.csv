@@ -1,4 +1,4 @@
-id,start_date,end_date,guest_id,total
+reservationId,start_date,end_date,guest_id,total
 1,2022-02-13,2022-02-15,194,510
 2,2021-12-04,2021-12-05,412,318.75
 3,2021-12-07,2021-12-13,451,1657.50
