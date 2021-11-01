@@ -2,7 +2,7 @@
 
 ## High-level Requirements
 
-User is a solar farm administrator.
+User is a AirBnB Reservation administrator.
 
 - The administrator may view existing reservations for a host.
 - The administrator may create a reservation for a guest with a host.
