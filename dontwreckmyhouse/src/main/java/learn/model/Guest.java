@@ -5,6 +5,8 @@ public class Guest {
     private String firstName;
     private String lastName;
     private String guestEmail;
+    private int guestPhone;
+    private String guestState;
 
 
     public int getGuestId() {
@@ -39,5 +41,19 @@ public class Guest {
         this.guestEmail = guestEmail;
     }
 
+    public int getGuestPhone() {
+        return guestPhone;
+    }
 
+    public void setGuestPhone(int guestPhone) {
+        this.guestPhone = guestPhone;
+    }
+
+    public String getGuestState() {
+        return guestState;
+    }
+
+    public void setGuestState(String guestState) {
+        this.guestState = guestState;
+    }
 }

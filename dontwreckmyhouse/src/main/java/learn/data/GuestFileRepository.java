@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class GuestFileRepository implements GuestRepository{
     private final String filePath;
-    private static final String HEADER = "id,firstname,lastname,email";
+    private static final String HEADER = "guest_id,first_name,last_name,email,phone,state";
 
     public GuestFileRepository(String filePath) {
         this.filePath = filePath;
@@ -31,21 +31,29 @@ public class GuestFileRepository implements GuestRepository{
         return result;
     }
     @Override
-    public List<Guest> findByEmail(String guestEmail) {
+    public List<Guest> findByGuestEmail(String guestEmail) {
         return findAll().stream()
                 .filter(i -> i.getGuestEmail().equalsIgnoreCase(guestEmail))
                 .collect(Collectors.toList());
     }
-
-//    public Guest findById(int id) {
-//    }
+    @Override
+    public Guest findByGuestId(int guestId) {
+        for (Guest guest : findAll()) {
+            if (guest.getGuestId() == guestId) {
+                return guest;
+            }
+        }
+        return null;
+    }
 
     private String serialize(Guest guest) {
-        return String.format("%s,%s,%s,%s",
+        return String.format("%s,%s,%s,%s,%s,%s",
                 guest.getGuestId(),
                 guest.getFirstName(),
                 guest.getLastName(),
-                guest.getGuestEmail()
+                guest.getGuestEmail(),
+                guest.getGuestPhone(),
+                guest.getGuestState()
                 );
     }
     private Guest deserialize(String[] fields) {
@@ -54,6 +62,8 @@ public class GuestFileRepository implements GuestRepository{
         result.setFirstName(fields[1]);
         result.setLastName(fields[2]);
         result.setGuestEmail(fields[3]);
+        result.setGuestPhone(Integer.parseInt(fields[4]));
+        result.setGuestState(fields[5]);
         return result;
     }
 

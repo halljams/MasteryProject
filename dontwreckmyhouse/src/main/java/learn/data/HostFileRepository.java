@@ -4,16 +4,14 @@ import learn.model.Host;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class HostFileRepository implements HostRepository {
 
     private final String filePath;
-    private static final String HEADER = "hostEmail,location,rent/day";
+    private static final String HEADER = "reservationId,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
 
     public HostFileRepository(String filePath) {
         this.filePath = filePath;
@@ -37,17 +35,36 @@ public class HostFileRepository implements HostRepository {
         }
         return result;
     }
+    public List<Host> findByHostEmail(String hostEmail) {
+        return findAll().stream()
+                .filter(i -> i.getHostEmail().equalsIgnoreCase(hostEmail))
+                .collect(Collectors.toList());
+    }
     private String serialize(Host host) {
-        return String.format("%s,%s,%s",
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                host.getReservationId(),
+                host.getLast_name(),
                 host.getHostEmail(),
-                host.getLocation(),
-                host.getRentPerDay());
+                host.getPhone(),
+                host.getAddress(),
+                host.getCity(),
+                host.getState(),
+                host.getPostal_code(),
+                host.getStandard_rate(),
+                host.getStandard_rate());
     }
     private Host deserialize(String[] fields) {
         Host result = new Host();
-        result.setHostEmail(fields[0]);
-        result.setLocation(fields[1]);
-        result.setRentPerDay(BigDecimal.valueOf(Long.parseLong(fields[2])));
+        result.setReservationId(String.valueOf(fields[0]));
+        result.setLast_name(String.valueOf(fields[1]));
+        result.setHostEmail(String.valueOf(fields[2]));
+        result.setPhone(Integer.parseInt(fields[3]));
+        result.setAddress(String.valueOf(fields[4]));
+        result.setCity(String.valueOf(fields[5]));
+        result.setState(String.valueOf(fields[6]));
+        result.setPostal_code(Integer.parseInt(fields[7]));
+        result.setStandard_rate(BigDecimal.valueOf(Long.parseLong(fields[8]), 2));
+        result.setWeekend_rate(BigDecimal.valueOf(Long.parseLong(fields[9]), 2));
         return result;
     }
 

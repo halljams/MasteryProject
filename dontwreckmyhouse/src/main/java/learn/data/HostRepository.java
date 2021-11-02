@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface HostRepository {
     public List<Host> findAll();
+    List<Host> findByHostEmail(String hostEmail);
 }
