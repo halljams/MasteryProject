@@ -8,4 +8,6 @@ import java.util.List;
 public interface ReservationRepository {
     Reservation add(Reservation reservation) throws DataException;
     List<Reservation> findByHostEmail(Host hostEmail);
+
+    Object findByHostEmail(String guestEmail);
 }

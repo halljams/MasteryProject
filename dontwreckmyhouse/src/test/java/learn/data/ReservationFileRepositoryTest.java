@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationFileRepositoryTest {
     
-    private static final String SEED_PATH = "./reservations/reservation-seed.csv";
-    static final String TEST_PATH = "./reservations/reservation-test.csv";
+    private static final String SEED_PATH = "./reservations-test/reservation-seed.csv";
+    static final String TEST_PATH = "./reservations-test/reservation-test.csv";
 
 
     ReservationRepository repository = new ReservationFileRepository(TEST_PATH);

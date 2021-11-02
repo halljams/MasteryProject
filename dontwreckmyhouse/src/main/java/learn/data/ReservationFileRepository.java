@@ -36,6 +36,12 @@ public class ReservationFileRepository implements ReservationRepository {
         }
         return result;
     }
+
+    @Override
+    public Object findByHostEmail(String guestEmail) {
+        return null;
+    }
+
     @Override
     public Reservation add(Reservation reservation) throws DataException {
         List<Reservation> all = findByHostEmail(reservation.getHost());
