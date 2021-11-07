@@ -7,13 +7,34 @@ public class Reservation {
     private int reservationId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Guest guestEmail;
-    private Guest guestName;
     private int guestId;
-    private Host host;
     private BigDecimal total;
+    private Host host;
+    private Guest guest;
 
+    public int getReservationId() {
+        return reservationId;
+    }
 
+    public Host getHost() {
+        return host;
+    }
+
+    public void setHost(Host host) {
+        this.host = host;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
+    }
+
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
+    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -21,14 +42,6 @@ public class Reservation {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
-    }
-
-    public int getGuestId() {
-        return guestId;
-    }
-
-    public void setGuestId(int guestId) {
-        this.guestId = guestId;
     }
 
     public LocalDate getEndDate() {
@@ -39,35 +52,12 @@ public class Reservation {
         this.endDate = endDate;
     }
 
-    public Guest getGuestEmail() {
-        return guestEmail;
+    public int getGuestId() {
+        return guestId;
     }
 
-    public void setGuestEmail(Guest guestEmail) {
-        this.guestEmail = guestEmail;
-    }
-
-
-
-    public int getReservationId() {
-        return reservationId;
-    }
-
-    public void setReservationId(int reservationId) {
-        this.reservationId = reservationId;
-    }
-
-
-    public Guest getGuest() {
-        return guestName;
-    }
-
-    public void setGuest(Guest guestName) {
-        this.guestName = guestName;
-    }
-
-    public Host getHost() {
-        return host;
+    public void setGuestId(int guestId) {
+        this.guestId = guestId;
     }
 
     public BigDecimal getTotal() {
@@ -78,13 +68,4 @@ public class Reservation {
         this.total = total;
     }
 
-    public void setHost(Host host) {
-        this.host = this.host;
     }
-
-    public void setGuest(String valueOf) {
-    }
-
-    public void setGuestId() {
-    }
-}

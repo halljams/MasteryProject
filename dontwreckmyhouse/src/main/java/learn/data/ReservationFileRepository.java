@@ -20,14 +20,14 @@ public class ReservationFileRepository implements ReservationRepository {
         this.directory = directory;
     }
 
-    public List<Reservation> findByHostEmail(Host hostEmail) {
-        ArrayList<Reservation> result = new ArrayList<>(0);
+    public List<Reservation> findByHostEmail(String hostEmail) {
+        ArrayList<Reservation> result = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(directory))) {
             reader.readLine();
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] fields = line.split(",", -1);
-                if (fields.length == 4) {
+                if (fields.length == 5) {
                     result.add(deserialize(fields, hostEmail));
                 }
             }
@@ -37,26 +37,39 @@ public class ReservationFileRepository implements ReservationRepository {
         return result;
     }
 
-    @Override
-    public Object findByHostEmail(String guestEmail) {
-        return null;
+    public List<Reservation> findByHostID(String hostId) {
+        ArrayList<Reservation> result = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(directory))) {
+            reader.readLine();
+
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                String[] fields = line.split(",", -1);
+                if (fields.length == 5) {
+                    result.add(deserialize(fields, hostId));
+                }
+            }
+        } catch (IOException ex) {
+
+        }
+        return result;
     }
+
 
     @Override
     public Reservation add(Reservation reservation) throws DataException {
-        List<Reservation> all = findByHostEmail(reservation.getHost());
+        List<Reservation> all = findByHostEmail(reservation.getHost().getHostEmail());
         reservation.setReservationId(getNextId(all));
         all.add(reservation);
-        writeAll(all, reservation.getHost());
+        writeAll(all, reservation.getHost().getHostEmail());
         return reservation;
     }
 
     public boolean update(Reservation reservation) throws DataException {
-        List<Reservation> all = findByHostEmail(reservation.getHost());
+        List<Reservation> all = findByHostEmail(reservation.getHost().getHostEmail());
         for (int i = 0; i <all.size(); i++) {
             if (Objects.equals(all.get(i).getReservationId(), reservation.getReservationId())) {
                 all.set(i, reservation);
-                writeAll(all, reservation.getHost());
+                writeAll(all, reservation.getHost().getReservationId());
                 return true;
             }
         }
@@ -73,7 +86,7 @@ public class ReservationFileRepository implements ReservationRepository {
     }
 
     private String serialize(Reservation reservation) {
-        return String.format("%s,%s-%s,%s,%s,",
+        return String.format("%s,%s,%s,%s,%s",
                 reservation.getReservationId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
@@ -81,22 +94,22 @@ public class ReservationFileRepository implements ReservationRepository {
                 reservation.getTotal());
     }
 
-    private Reservation deserialize(String[] fields, Host hostEmail) {
+    private Reservation deserialize(String[] fields, String hostId) {
         Reservation result = new Reservation();
         result.setReservationId(Integer.parseInt(fields[0]));
         result.setStartDate(LocalDate.parse(fields[1]));
         result.setEndDate(LocalDate.parse(fields[2]));
         result.setGuestId(Integer.parseInt(fields[3]));
-        result.setTotal(BigDecimal.valueOf(Long.parseLong(fields[4])));
+        result.setTotal(BigDecimal.valueOf(Integer.parseInt(fields[4])));
         return result;
     }
 
-    private String getFilePath(Host host) {
-        return Paths.get(directory, host + ".csv").toString();
+    private String getFilePath(String hostId) {
+        return Paths.get(directory, hostId + ".csv").toString();
     }
 
-    private void writeAll(List<Reservation> reservations, Host host) throws DataException {
-        try (PrintWriter writer = new PrintWriter(getFilePath(host))) {
+    private void writeAll(List<Reservation> reservations, String hostId) throws DataException {
+        try (PrintWriter writer = new PrintWriter(getFilePath(hostId))) {
 
             writer.println(HEADER);
 

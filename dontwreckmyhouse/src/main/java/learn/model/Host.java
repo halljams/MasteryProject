@@ -6,11 +6,11 @@ public class Host {
     private String reservationId;
     private String last_name;
     private String hostEmail;
-    private int phone;
+    private String phone;
     private String address;
     private String city;
     private String state;
-    private int postal_code;
+    private String postal_code;
     private BigDecimal standard_rate;
     private BigDecimal weekend_rate;
 
@@ -40,11 +40,11 @@ public class Host {
         this.last_name = last_name;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -72,11 +72,11 @@ public class Host {
         this.state = state;
     }
 
-    public int getPostal_code() {
+    public String getPostal_code() {
         return postal_code;
     }
 
-    public void setPostal_code(int postal_code) {
+    public void setPostal_code(String postal_code) {
         this.postal_code = postal_code;
     }
 

@@ -3,7 +3,7 @@ package learn.ui;
 public enum MainMenuOption {
     EXIT(0,"Exit",false),
 
-    VIEW_BY_HOST(1,"View for Host: ",false),
+    VIEW_RESERVATIONS_FOR_HOST(1,"Host by Email",false),
 
     MAKE_RESERVATION(2,"Make a reservation",false),
 

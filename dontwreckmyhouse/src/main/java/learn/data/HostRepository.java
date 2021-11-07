@@ -5,6 +5,9 @@ import learn.model.Host;
 import java.util.List;
 
 public interface HostRepository {
-    public List<Host> findAll();
-    List<Host> findByHostEmail(String hostEmail);
+    List<Host> findAll();
+
+    Host findByHostEmail(String hostEmail);
+
+    Host findHostById(String hostId);
 }

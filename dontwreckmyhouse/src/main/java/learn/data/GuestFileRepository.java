@@ -21,7 +21,7 @@ public class GuestFileRepository implements GuestRepository{
             reader.readLine();
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] fields = line.split(",", -1);
-                if (fields.length == 4) {
+                if (fields.length == 6) {
                     result.add(deserialize(fields));
                 }
             }
@@ -31,10 +31,10 @@ public class GuestFileRepository implements GuestRepository{
         return result;
     }
     @Override
-    public List<Guest> findByGuestEmail(String guestEmail) {
+    public Guest findByGuestEmail(String guestEmail) {
         return findAll().stream()
                 .filter(i -> i.getGuestEmail().equalsIgnoreCase(guestEmail))
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
     }
     @Override
     public Guest findByGuestId(int guestId) {
@@ -62,7 +62,7 @@ public class GuestFileRepository implements GuestRepository{
         result.setFirstName(fields[1]);
         result.setLastName(fields[2]);
         result.setGuestEmail(fields[3]);
-        result.setGuestPhone(Integer.parseInt(fields[4]));
+        result.setGuestPhone(fields[4]);
         result.setGuestState(fields[5]);
         return result;
     }

@@ -5,7 +5,7 @@ public class Guest {
     private String firstName;
     private String lastName;
     private String guestEmail;
-    private int guestPhone;
+    private String guestPhone;
     private String guestState;
 
 
@@ -41,11 +41,11 @@ public class Guest {
         this.guestEmail = guestEmail;
     }
 
-    public int getGuestPhone() {
+    public String getGuestPhone() {
         return guestPhone;
     }
 
-    public void setGuestPhone(int guestPhone) {
+    public void setGuestPhone(String guestPhone) {
         this.guestPhone = guestPhone;
     }
 

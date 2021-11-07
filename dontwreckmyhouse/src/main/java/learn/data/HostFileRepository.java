@@ -26,7 +26,7 @@ public class HostFileRepository implements HostRepository {
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] fields = line.split(",", -1);
-                if (fields.length == 4) {
+                if (fields.length == 10) {
                     result.add(deserialize(fields));
                 }
             }
@@ -35,10 +35,16 @@ public class HostFileRepository implements HostRepository {
         }
         return result;
     }
-    public List<Host> findByHostEmail(String hostEmail) {
+    public Host findHostById(String hostId) {
+        return findAll().stream()
+                .filter(i->i.getReservationId().equalsIgnoreCase(hostId))
+                .findFirst().orElse(null);
+    }
+
+    public Host findByHostEmail(String hostEmail) {
         return findAll().stream()
                 .filter(i -> i.getHostEmail().equalsIgnoreCase(hostEmail))
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
     }
     private String serialize(Host host) {
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
@@ -58,13 +64,15 @@ public class HostFileRepository implements HostRepository {
         result.setReservationId(String.valueOf(fields[0]));
         result.setLast_name(String.valueOf(fields[1]));
         result.setHostEmail(String.valueOf(fields[2]));
-        result.setPhone(Integer.parseInt(fields[3]));
+        result.setPhone(String.valueOf(fields[3]));
         result.setAddress(String.valueOf(fields[4]));
         result.setCity(String.valueOf(fields[5]));
         result.setState(String.valueOf(fields[6]));
-        result.setPostal_code(Integer.parseInt(fields[7]));
-        result.setStandard_rate(BigDecimal.valueOf(Long.parseLong(fields[8]), 2));
-        result.setWeekend_rate(BigDecimal.valueOf(Long.parseLong(fields[9]), 2));
+        result.setPostal_code(String.valueOf(fields[7]));
+  //      result.setStandard_rate(BigDecimal.valueOf(Integer.parseInt(fields[8]), 2));
+//        result.setWeekend_rate(BigDecimal.valueOf(Integer.parseInt(fields[9]), 2));
+        result.setStandard_rate(new BigDecimal(fields[8]));
+        result.setWeekend_rate(new BigDecimal(fields[9]));
         return result;
     }
 
