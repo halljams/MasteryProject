@@ -45,6 +45,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\reservation-test\guest-test.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\reservation-test\host-test.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\reservation-test\null.csv">
           <value>
             <Attribute>

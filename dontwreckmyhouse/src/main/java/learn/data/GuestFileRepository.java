@@ -1,11 +1,13 @@
 package learn.data;
 
 import learn.model.Guest;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class GuestFileRepository implements GuestRepository{
     private final String filePath;

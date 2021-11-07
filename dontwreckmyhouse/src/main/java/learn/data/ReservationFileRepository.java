@@ -1,5 +1,6 @@
 package learn.data;
 
+import learn.model.Guest;
 import learn.model.Host;
 import learn.model.Reservation;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 public class ReservationFileRepository implements ReservationRepository {
     private final String directory;
@@ -22,7 +24,7 @@ public class ReservationFileRepository implements ReservationRepository {
 
     public List<Reservation> findByHostEmail(String hostEmail) {
         ArrayList<Reservation> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(directory))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(hostEmail))) {
             reader.readLine();
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -39,7 +41,7 @@ public class ReservationFileRepository implements ReservationRepository {
 
     public List<Reservation> findByHostID(String hostId) {
         ArrayList<Reservation> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(directory))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(hostId))) {
             reader.readLine();
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -90,17 +92,27 @@ public class ReservationFileRepository implements ReservationRepository {
                 reservation.getReservationId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
-                reservation.getGuestId(),
+                reservation.getGuest().getGuestId(),
                 reservation.getTotal());
     }
 
     private Reservation deserialize(String[] fields, String hostId) {
+
+        //field 0 is reservationId field 1 start_date, field 2 end_date, field 3 guest_id, field 4 total
         Reservation result = new Reservation();
         result.setReservationId(Integer.parseInt(fields[0]));
         result.setStartDate(LocalDate.parse(fields[1]));
         result.setEndDate(LocalDate.parse(fields[2]));
-        result.setGuestId(Integer.parseInt(fields[3]));
         result.setTotal(BigDecimal.valueOf(Integer.parseInt(fields[4])));
+
+        Host host = new Host();
+        host.setReservationId(hostId);
+        result.setHost(host);
+
+        Guest guest = new Guest();
+        guest.setGuestId(Integer.parseInt(fields[3]));
+        result.setGuest(guest);
+        ;
         return result;
     }
 
