@@ -138,7 +138,7 @@ public class Controller {
         if (!result.isSuccess()) {
             view.displayStatus(false, result.getErrorMessages());
         } else {
-            String successMessage = String.format("Reservation %s has been edited.", result.getPayload().getReservationId());
+            String successMessage = String.format("Your reservation has been edited.", result.getPayload());
             view.displayStatus(true, successMessage);
         }
     }
@@ -157,7 +157,7 @@ public class Controller {
         if (!result.isSuccess()) {
             view.displayStatus(false, result.getErrorMessages());
         } else {
-            String successMessage = String.format("Reservation %s has been canceled.", result.getPayload().getReservationId());
+            String successMessage = String.format("Your reservation has been canceled.", result.getPayload());
             view.displayStatus(true, successMessage);
         }
 
