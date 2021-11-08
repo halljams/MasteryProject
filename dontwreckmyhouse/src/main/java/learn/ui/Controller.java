@@ -109,15 +109,17 @@ public class Controller {
         Guest guest = guestService.findByGuestEmail(guestEmail);
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
-        Reservation reservation = reservationService.findByHostIdAndGuestId(host, guest);
-        view.displayReservation(host,guest,reservation);
+        List<Reservation> reservations = reservationService.findByHostIdAndGuestId(host, guest);
+
+        Reservation reservation = view.chooseReservation(reservations);
+        view.displayReservation(reservation);
         // ^ reservation needs to be grabbed
 
-        LocalDate newStart = view.editStartofReservation(reservation);
+        LocalDate newStart = view.editStartOfReservation(reservation);
         if(newStart == null) {
             newStart = reservation.getStartDate();
         }
-        LocalDate newEnd = view.editEndofReservation(reservation);
+        LocalDate newEnd = view.editEndOfReservation(reservation);
         reservation.setStartDate(newStart);
         reservation.setEndDate(newEnd);
         BigDecimal costOfStay = reservationService.costPerStay(newStart, newEnd, host);
@@ -146,8 +148,9 @@ public class Controller {
         Guest guest = guestService.findByGuestEmail(guestEmail);
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
-        Reservation reservation = reservationService.findByHostIdAndGuestId(host, guest);
-        view.displayReservation(host,guest,reservation);
+        List<Reservation> reservations = reservationService.findByHostIdAndGuestId(host, guest);
+        Reservation reservation = view.chooseReservation(reservations);
+        view.displayReservation(reservation);
         // ^ reservation needs to be grabbed
 
         Result<Reservation> result = reservationService.cancelReservation(reservation);

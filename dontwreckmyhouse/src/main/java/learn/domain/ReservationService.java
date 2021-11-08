@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,31 +40,31 @@ public class ReservationService {
 
         List<Reservation> result = reservationRepository.findByHostID(hostId);
         for (Reservation reservation : result) {
-            reservation.setGuest(guestMap.get(reservation.getGuest().getGuestId()));
-            reservation.setHost(hostMap.get(reservation.getHost().getHostEmail()));
+            reservation.setGuest(guestMap.get(reservation.getGuestId()));
+            reservation.setHost(hostMap.get(reservation.getHost().getReservationId()));
         }
         return result;
     }
 
-    public Reservation findByHostIdAndGuestId(Host host, Guest guest) throws DataException {
+    public List<Reservation> findByHostIdAndGuestId(Host host, Guest guest) throws DataException {
+        List<Reservation> result = new ArrayList<>();
         if (host == null) {
             return null;
         }
         if (guest == null) {
             return null;
         }
-        Reservation reservation = new Reservation();
-            if (reservation.getGuest() == guest
-            && reservation.getHost() == host) {
-                reservation.getGuestId();
-                reservation.getStartDate();
-                reservation.getEndDate();
+        List<Reservation> reservations = findByHostID(host.getReservationId()); // amountc@ehow.com  charley4@apple.com
+        for (Reservation reservation : reservations) {
+            if (reservation.getGuestId() == guest.getGuestId()) {
+                reservation.setHost(host);
+                reservation.setGuest(guest);
+                result.add(reservation);
+            }
+        }
+        return result;
+    }
 
-                return reservation;
-            } else {
-        return reservation;
-    }
-    }
     public Result<Reservation> add(Reservation reservation) throws DataException {
         Result<Reservation> result = validate(reservation);
         if (!result.isSuccess()) {
@@ -102,7 +103,6 @@ public class ReservationService {
         return result;
 
     }
-
 
 
     public BigDecimal costPerStay(LocalDate start, LocalDate end, Host hostId) {
@@ -166,7 +166,8 @@ public class ReservationService {
     }
 
     private void validateField(Reservation reservation, Result<Reservation> result) {
-        if (reservation.getStartDate().isBefore(LocalDate.now())
+        LocalDate today = LocalDate.now();
+        if (reservation.getStartDate().isBefore(today)
                 || reservation.getEndDate().isBefore(LocalDate.now())) {
             result.addErrorMessage("Cannot create reservations for the past.");
         }

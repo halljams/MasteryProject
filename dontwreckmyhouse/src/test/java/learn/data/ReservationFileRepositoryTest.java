@@ -39,33 +39,31 @@ class ReservationFileRepositoryTest {
 
         reservation.setHost(host);
         Guest guest = new Guest();
-        guest.setGuestId(25);
+        reservation.setGuestId(25);
         reservation.setGuest(guest);
 
         ReservationRepository repository = new ReservationFileRepository("./reservation-test");
         reservation = repository.add(reservation);
 
         assertNotNull(reservation);
-        assertEquals(2, reservation.getReservationId());
+        assertTrue(reservation.getReservationId() > 5);
     }
 
     @Test
     void shouldUpdateReservation() throws DataException {
         Reservation reservation = new Reservation();
-        reservation.setReservationId(1);
+        reservation.setReservationId(6);
 
-        reservation.setStartDate(LocalDate.of(2021, 10, 12));
-        reservation.setEndDate(LocalDate.of(2021, 10, 15));
+        reservation.setStartDate(LocalDate.of(2021, 10, 25));
+        reservation.setEndDate(LocalDate.of(2021, 10, 30));
 
         reservation.setTotal(BigDecimal.valueOf(800));
 
         Host host = new Host();
         host.setReservationId("reservation-creation-test");
-
         reservation.setHost(host);
-        Guest guest = new Guest();
-        guest.setGuestId(15);
-        reservation.setGuest(guest);
+
+        reservation.setGuestId(25);
 
         ReservationRepository repository = new ReservationFileRepository("./reservation-test");
 

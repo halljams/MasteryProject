@@ -107,6 +107,27 @@ public class View {
         }
         return guests.get(index - 1);
     }
+    public Reservation chooseReservation(List<Reservation> reservations) {
+        if (reservations.size() == 0) {
+            io.println("Reservations not found.");
+            return null;
+        }
+        int index = 1;
+        for (Reservation reservation: reservations.stream().limit(25).collect(Collectors.toList())) {
+            io.printf("%s: %s - %s  Guest: %s  Host: %s%n", index++, reservation.getStartDate(), reservation.getEndDate(), reservation.getGuest().getGuestEmail(), reservation.getHost().getHostEmail());
+            if (reservations.size() > 25) {
+                io.println("Wow this guest enjoys this place. Too many reservations to reference.");
+            }
+        }
+        io.println("0: Exit");
+        String message = String.format("Select a reservation by the index [0-%s]: ",index);
+
+        index = io.readInt(message, 0, index);
+        if (index <=0) {
+            return null;
+        }
+        return reservations.get(index -1);
+    }
 
 
     //creation
@@ -116,33 +137,31 @@ public class View {
         reservation.setGuest(guest);
         return reservation;
     }
-    public LocalDate editStartofReservation(Reservation reservation) {
-        reservation = new Reservation();
-        io.printf("Start %s: %n",reservation.getStartDate());
-        return io.readLocalDate("Enter new start date or click Enter to keep the same: ");
+    public LocalDate editStartOfReservation(Reservation reservation) {
+        io.printf("Start %s:  ",reservation.getStartDate());
+        return io.readLocalDate("Enter desired start date [MM/DD/YYYY]: ");
 
     }
-    public LocalDate editEndofReservation(Reservation reservation) {
-        reservation = new Reservation();
-        io.printf("End %s: %n", reservation.getEndDate());
-        return io.readLocalDate("Enter new end date: ");
+    public LocalDate editEndOfReservation(Reservation reservation) {
+        io.printf("End %s: ", reservation.getEndDate());
+        return io.readLocalDate("Enter desired end date [MM/DD/YYYY]: ");
     }
 
 
     //displays
-    public void displayReservation(Host host, Guest guest, Reservation reservation) {
-        io.printf("%s: %s, %s",
-                host.getLast_name(),
-                host.getCity(),
-                host.getState());
-        io.println("".repeat(15));
-        io.printf("%s:%n %s - %s, %s: %s, %s, %s",
+    public void displayReservation(Reservation reservation) {
+        io.printf("%s: %s, %s%n",
+                reservation.getHost().getLast_name(),
+                reservation.getHost().getCity(),
+                reservation.getHost().getState());
+        io.println("=".repeat(15));
+        io.printf("%s: %s - %s : %s, %s : %s%n",
                 reservation.getReservationId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
-                guest.getLastName(),
-                guest.getFirstName(),
-                guest.getGuestEmail());
+                reservation.getGuest().getLastName(),
+                reservation.getGuest().getFirstName(),
+                reservation.getGuest().getGuestEmail());
     }
 
     public void displayHeader(String message) {

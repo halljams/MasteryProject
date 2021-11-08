@@ -39,8 +39,14 @@ public class ReservationFileRepository implements ReservationRepository {
         }
         return result;
     }
-
-
+//    public Reservation findByReservationId(int reservationId) {
+//        for (Reservation reservation : findByHostID()) {
+//            if (reservation.getReservationId() == reservationId) {
+//                return reservation;
+//
+//            }
+//        }
+//    }
     @Override
     public Reservation add(Reservation reservation) throws DataException {
         List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
@@ -52,8 +58,8 @@ public class ReservationFileRepository implements ReservationRepository {
     @Override
     public boolean update(Reservation reservation) throws DataException {
         List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
-        for (int i = 0; i <all.size(); i++) {
-            if (Objects.equals(all.get(i).getReservationId(), reservation.getReservationId())) {
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).getReservationId() == reservation.getReservationId()) {
                 all.set(i, reservation);
                 writeAll(all, reservation.getHost().getReservationId());
                 return true;
@@ -88,7 +94,7 @@ public class ReservationFileRepository implements ReservationRepository {
                 reservation.getReservationId(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
-                reservation.getGuest().getGuestId(),
+                reservation.getGuestId(),
                 reservation.getTotal());
     }
 
@@ -105,9 +111,7 @@ public class ReservationFileRepository implements ReservationRepository {
         host.setReservationId(hostId);
         result.setHost(host);
 
-        Guest guest = new Guest();
-        guest.setGuestId(Integer.parseInt(fields[3]));
-        result.setGuest(guest);
+        result.setGuestId(Integer.parseInt(fields[3]));
 
         return result;
     }
