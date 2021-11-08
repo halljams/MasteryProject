@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReservationFileRepositoryTest {
 
 
-//    String host = "3edda6bc-ab95-49a8-8962-d50b53f84b15";
+    String host = "3edda6bc-ab95-49a8-8962-d50b53f84b15";
 //    String host2 = "eyearnes0@sfgate.com";
 //
 //
@@ -26,13 +26,13 @@ class ReservationFileRepositoryTest {
 //      assertTrue(reservations.size() > 1);
 //
 //    }
-//    @Test
-//    void shouldFindById() {
-//        ReservationFileRepository repo = new ReservationFileRepository("./reservation-test");
-//        List<Reservation> reservations = repo.findByHostID(host);
-//        assertNotNull(reservations);
-//        assertTrue(reservations.size() > 1);
-//    }
+    @Test
+    void shouldFindById() {
+        ReservationFileRepository repo = new ReservationFileRepository("./reservation-test");
+        List<Reservation> reservations = repo.findByHostID(host);
+        assertNotNull(reservations);
+        assertTrue(reservations.size() > 1);
+    }
 //
 //    @Test
 //    void shouldCreateReservation() throws DataException {

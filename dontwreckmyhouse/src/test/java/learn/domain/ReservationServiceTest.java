@@ -81,14 +81,7 @@ class ReservationServiceTest {
 
     }
 
-    @Test
-    void dateRange() {
-        LocalDate start = LocalDate.of(2020, 10, 15);
-        LocalDate end = LocalDate.of(2020, 10, 25);
-        List<LocalDate> result = service.dateRange(start,end);
-        assertNotNull(result);
 
-    }
 
     @Test
     void rentPerDay() {

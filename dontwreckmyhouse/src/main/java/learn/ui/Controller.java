@@ -65,7 +65,8 @@ public class Controller {
 //            return;
 //        }
         String hostEmail = view.getHostEmail();
-        List<Reservation> reservations = reservationService.findByHostEmail(hostEmail);
+        Host host = hostService.findByHostEmail(hostEmail);
+        List<Reservation> reservations = reservationService.findByHostID(host.getReservationId());
         view.displayReservations(reservations);
         view.enterToContinue();
     }
@@ -77,11 +78,14 @@ public class Controller {
         Host host = hostService.findByHostEmail(hostEmail);
 
         Reservation reservation = view.makeReservation(host, guest);
+        reservation.setGuestId(guest.getGuestId());
         //need prompt and response for date ranges and total cost
         LocalDate  startDate = view.getStartDate();
         LocalDate endDate = view.getEndDate();
-        List<LocalDate> lenghtOfStay = reservationService.dateRange(startDate, endDate);
-        BigDecimal costOfStay = reservationService.costPerStay(lenghtOfStay, host);
+        reservation.setStartDate(startDate);
+        reservation.setEndDate(endDate);
+        BigDecimal costOfStay = reservationService.costPerStay(startDate, endDate, host);
+        reservation.setTotal(costOfStay);
         view.displayCostSummary(startDate,endDate,costOfStay);
         //need to see if they accept
 

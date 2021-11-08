@@ -15,8 +15,8 @@ public class ReservationRepositoryDoubleTest implements ReservationRepository {
     public ReservationRepositoryDoubleTest() {
         Reservation reservation = new Reservation();
 
-        reservation.setStartDate(LocalDate.of(2021,10,12));
-        reservation.setEndDate(LocalDate.of(2021,10, 15));
+        reservation.setStartDate(LocalDate.of(2021, 10, 12));
+        reservation.setEndDate(LocalDate.of(2021, 10, 15));
         reservation.setGuestId(5);
         reservation.setTotal(BigDecimal.valueOf(500));
 
@@ -28,16 +28,16 @@ public class ReservationRepositoryDoubleTest implements ReservationRepository {
         return reservation;
     }
 
-    @Override
-    public List<Reservation> findByHostEmail(String hostEmail) throws DataException{
-        ArrayList<Reservation> result = new ArrayList<>();
-        for (Reservation reservation : reservations) {
-            if (reservation.getHost().getHostEmail() == hostEmail) {
-                result.add(reservation);
-            }
-        }
-        return result;
-    }
+//    @Override
+//    public List<Reservation> findByHostEmail(String hostEmail) throws DataException{
+//        ArrayList<Reservation> result = new ArrayList<>();
+//        for (Reservation reservation : reservations) {
+//            if (reservation.getHost().getHostEmail() == hostEmail) {
+//                result.add(reservation);
+//            }
+//        }
+//        return result;
+//}
 
     @Override
     public List<Reservation> findByHostID(String hostId) throws DataException {

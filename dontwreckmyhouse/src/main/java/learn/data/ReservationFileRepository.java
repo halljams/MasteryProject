@@ -22,26 +22,26 @@ public class ReservationFileRepository implements ReservationRepository {
         this.directory = directory;
     }
 
-    public List<Reservation> findByHostEmail(String hostEmail) {
-        ArrayList<Reservation> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(hostEmail))) {
-            reader.readLine();
-
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                String[] fields = line.split(",", -1);
-                if (fields.length == 5) {
-                    result.add(deserialize(fields, hostEmail));
-                }
-            }
-        } catch (IOException ex) {
-
-        }
-        return result;
-    }
+//    public List<Reservation> findByHostEmail(String hostEmail) {
+//        ArrayList<Reservation> result = new ArrayList<>();
+//        try (BufferedReader reader = new BufferedReader(new FileReader(hostEmail))) {
+//            reader.readLine();
+//
+//            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+//                String[] fields = line.split(",", -1);
+//                if (fields.length == 5) {
+//                    result.add(deserialize(fields, hostEmail));
+//                }
+//            }
+//        } catch (IOException ex) {
+//
+//        }
+//        return result;
+//    }
 
     public List<Reservation> findByHostID(String hostId) {
         ArrayList<Reservation> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(hostId))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(getFilePath(hostId)))) {
             reader.readLine();
 
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -59,15 +59,15 @@ public class ReservationFileRepository implements ReservationRepository {
 
     @Override
     public Reservation add(Reservation reservation) throws DataException {
-        List<Reservation> all = findByHostEmail(reservation.getHost().getHostEmail());
+        List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
         reservation.setReservationId(getNextId(all));
         all.add(reservation);
-        writeAll(all, reservation.getHost().getHostEmail());
+        writeAll(all, reservation.getHost().getReservationId());
         return reservation;
     }
 
     public boolean update(Reservation reservation) throws DataException {
-        List<Reservation> all = findByHostEmail(reservation.getHost().getHostEmail());
+        List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
         for (int i = 0; i <all.size(); i++) {
             if (Objects.equals(all.get(i).getReservationId(), reservation.getReservationId())) {
                 all.set(i, reservation);
@@ -103,7 +103,7 @@ public class ReservationFileRepository implements ReservationRepository {
         result.setReservationId(Integer.parseInt(fields[0]));
         result.setStartDate(LocalDate.parse(fields[1]));
         result.setEndDate(LocalDate.parse(fields[2]));
-        result.setTotal(BigDecimal.valueOf(Integer.parseInt(fields[4])));
+        result.setTotal(new BigDecimal(fields[4]));
 
         Host host = new Host();
         host.setReservationId(hostId);
@@ -112,7 +112,7 @@ public class ReservationFileRepository implements ReservationRepository {
         Guest guest = new Guest();
         guest.setGuestId(Integer.parseInt(fields[3]));
         result.setGuest(guest);
-        ;
+
         return result;
     }
 
