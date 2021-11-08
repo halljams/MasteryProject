@@ -26,27 +26,25 @@ class ReservationServiceTest {
     }
     @Test
     void weekendRateShouldBeHigherRentPerDay() throws DataException {
-//        LocalDate start = LocalDate.of(2021,10,15);
-//        LocalDate end = LocalDate.of(2021, 10, 17);
-//        BigDecimal cost = BigDecimal.valueOf(hostRepository.findByHostEmail("eyearnes0@sfgate.com").getWeekend_rate().doubleValue());
-//        List<LocalDate> datesStayed = service.dateRange(start,end);
-//        BigDecimal costPerStay = service.costPerStay(datesStayed, cost);
-//
-//        assertEquals(BigDecimal.valueOf(1275), costPerStay);
+        LocalDate start = LocalDate.of(2021,10,15); //1 days at 123
+        LocalDate end = LocalDate.of(2021, 10, 17); // 2 day at 234
+
+        BigDecimal costPerStay = service.costPerStay(start, end, hostRepository.findHostById("3edda6bc-ab95-49a8-8962-d50b53f84b15"));
+
+        assertEquals(BigDecimal.valueOf(591.00).setScale(2), costPerStay);
 
 
     }
 
     @Test
     void standardRateRentPerDay() throws DataException {
-//    LocalDate start = LocalDate.of(2021,10,18);
-//    LocalDate end = LocalDate.of(2021, 10, 20);
-//
-//    BigDecimal cost = service.findByHostEmail("eyearnes0@sfgate.com").get().getHost().getWeekend_rate(); // wk 340, wknd 425
-//    List<LocalDate> datesStayed = service.dateRange(start,end);
-//    BigDecimal costPerStay = service.costPerStay(datesStayed, cost);
-//
-//    assertEquals(BigDecimal.valueOf(75), costPerStay);
+    LocalDate start = LocalDate.of(2021,10,18); // 3 days at 123
+    LocalDate end = LocalDate.of(2021, 10, 20);
+
+
+    BigDecimal costPerStay = service.costPerStay(start, end, hostRepository.findHostById("3edda6bc-ab95-49a8-8962-d50b53f84b15"));
+
+    assertEquals(BigDecimal.valueOf(369).setScale(2), costPerStay);
 
 
 
@@ -58,6 +56,7 @@ class ReservationServiceTest {
     @Test
     void shouldNotCreateReservationPast() throws DataException {
         Reservation reservation = new Reservation();
+        reservation.setHost(hostRepository.findHostById("3edda6bc-ab95-49a8-8962-d50b53f84b15"));
 
         reservation.setStartDate(LocalDate.of(2019,10,12));
         reservation.setEndDate(LocalDate.of(2019,10, 15));
@@ -65,41 +64,32 @@ class ReservationServiceTest {
         reservation.setTotal(BigDecimal.valueOf(500));
 
         Result<Reservation> result = service.add(reservation);
+        assertFalse(result.isSuccess());
 
     }
     @Test
     void shouldUpdateReservation() {
 
-    }
-    @Test
-    void startDateShouldBeBeforeEndDate() {
-//        LocalDate end= LocalDate.of(2020, 10, 15);
-//        LocalDate start = LocalDate.of(2020, 10, 25);
-//        List<LocalDate> result = service.dateRange(start,end);
-//        assertNull(result);
-//        //throws IllegalArgumentException
 
     }
 
 
-
-    @Test
-    void rentPerDay() {
-    }
-    @Test
-    void shouldAdd() throws DataException{
+//    @Test
+//    void shouldAdd() throws DataException{
 //        Reservation reservation = new Reservation();
-//        reservation.setHostId("AAaa-BBBB_CCCC-DDDD");
-//        reservation.setStartDate(LocalDate.of(2021,10,12));
-//        reservation.setEndDate(LocalDate.of(2021,10, 15));
-//        reservation.setGuestId(5);
+//        reservation.setHost(hostRepository.findHostById("test-host-id"));
+//        reservation.setReservationId(1);
+//        reservation.setStartDate(LocalDate.of(2022,10,20));
+//        reservation.setEndDate(LocalDate.of(2022,10, 25));
+//        reservation.setGuestId(1);
 //        reservation.setTotal(BigDecimal.valueOf(500));
+//        Result<Reservation> expected = new Result<>();
+//        expected.setPayload(reservation);
 //
-//        Result<Reservation> result = service.add(reservation);
+//        Result<Reservation> actual = service.add(reservation);
 //
+//        assertEquals(expected, actual);
 //
-//        assertEquals(1, result.getPayload().getReservationId());
-
-    }
+//    }
 
 }

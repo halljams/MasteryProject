@@ -39,14 +39,7 @@ public class ReservationFileRepository implements ReservationRepository {
         }
         return result;
     }
-//    public Reservation findByReservationId(int reservationId) {
-//        for (Reservation reservation : findByHostID()) {
-//            if (reservation.getReservationId() == reservationId) {
-//                return reservation;
-//
-//            }
-//        }
-//    }
+
     @Override
     public Reservation add(Reservation reservation) throws DataException {
         List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
