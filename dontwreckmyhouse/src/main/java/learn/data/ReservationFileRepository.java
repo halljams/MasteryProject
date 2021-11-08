@@ -22,22 +22,6 @@ public class ReservationFileRepository implements ReservationRepository {
         this.directory = directory;
     }
 
-//    public List<Reservation> findByHostEmail(String hostEmail) {
-//        ArrayList<Reservation> result = new ArrayList<>();
-//        try (BufferedReader reader = new BufferedReader(new FileReader(hostEmail))) {
-//            reader.readLine();
-//
-//            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-//                String[] fields = line.split(",", -1);
-//                if (fields.length == 5) {
-//                    result.add(deserialize(fields, hostEmail));
-//                }
-//            }
-//        } catch (IOException ex) {
-//
-//        }
-//        return result;
-//    }
 
     public List<Reservation> findByHostID(String hostId) {
         ArrayList<Reservation> result = new ArrayList<>();
@@ -65,7 +49,7 @@ public class ReservationFileRepository implements ReservationRepository {
         writeAll(all, reservation.getHost().getReservationId());
         return reservation;
     }
-
+    @Override
     public boolean update(Reservation reservation) throws DataException {
         List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
         for (int i = 0; i <all.size(); i++) {
@@ -77,6 +61,18 @@ public class ReservationFileRepository implements ReservationRepository {
         }
         return false;
 
+    }
+    @Override
+    public boolean cancelReservation(Reservation reservation) throws DataException {
+        List<Reservation> all = findByHostID(reservation.getHost().getReservationId());
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).getReservationId() == reservation.getReservationId()) {
+                all.remove(i);
+                writeAll(all, reservation.getHost().getReservationId());
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getNextId(List<Reservation> allReservations) {

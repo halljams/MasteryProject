@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\reservation-test\reservation-creation-test.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\reservation-test\test.csv">
           <value>
             <Attribute>

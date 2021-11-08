@@ -9,4 +9,5 @@ public interface ReservationRepository {
 
     List<Reservation> findByHostID(String hostId) throws DataException;
     boolean update(Reservation reservation) throws DataException;
+    boolean cancelReservation(Reservation reservation) throws DataException;
 }

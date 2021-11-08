@@ -28,7 +28,7 @@ public class View {
             min = Math.min(min, option.getValue());
             max = Math.max(max, option.getValue());
         }
-        String message = String.format("Select [%s-%s]: ", min, max - 1);
+        String message = String.format("Select [%s-%s]: ", min, max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
 
@@ -48,6 +48,8 @@ public class View {
     public LocalDate getEndDate() {
         return io.readLocalDate("Input the date for end of stay [MM/dd/yyyy]: ");
     }
+    public String confirmation() {
+        return io.readRequiredString( "Are you happy with this reservation {Y/N]: ");}
 
     //support gets
     public String getHostwithAidOfPrefixCity() {
@@ -114,9 +116,35 @@ public class View {
         reservation.setGuest(guest);
         return reservation;
     }
+    public LocalDate editStartofReservation(Reservation reservation) {
+        reservation = new Reservation();
+        io.printf("Start %s: %n",reservation.getStartDate());
+        return io.readLocalDate("Enter new start date or click Enter to keep the same: ");
+
+    }
+    public LocalDate editEndofReservation(Reservation reservation) {
+        reservation = new Reservation();
+        io.printf("End %s: %n", reservation.getEndDate());
+        return io.readLocalDate("Enter new end date: ");
+    }
 
 
     //displays
+    public void displayReservation(Host host, Guest guest, Reservation reservation) {
+        io.printf("%s: %s, %s",
+                host.getLast_name(),
+                host.getCity(),
+                host.getState());
+        io.println("".repeat(15));
+        io.printf("%s:%n %s - %s, %s: %s, %s, %s",
+                reservation.getReservationId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                guest.getLastName(),
+                guest.getFirstName(),
+                guest.getGuestEmail());
+    }
+
     public void displayHeader(String message) {
         io.println("");
         io.println(message);

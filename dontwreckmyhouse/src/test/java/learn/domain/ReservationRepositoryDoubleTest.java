@@ -55,6 +55,11 @@ public class ReservationRepositoryDoubleTest implements ReservationRepository {
         return true;
     }
 
+    @Override
+    public boolean cancelReservation(Reservation reservation) throws DataException {
+        return true;
+    }
+
 //    @Override
 //    public List<Reservation> findByHostID(String hostId) throws DataException {
 //        ArrayList<Reservation> result = new ArrayList<>();

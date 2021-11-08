@@ -1,0 +1,3 @@
+reservationId,start_date,end_date,guest_id,total
+1,2021-10-12,2021-10-15,15,800
+2,2021-10-16,2021-10-18,25,800

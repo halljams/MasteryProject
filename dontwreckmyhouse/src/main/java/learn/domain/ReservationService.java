@@ -12,12 +12,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class ReservationService {
@@ -47,6 +45,25 @@ public class ReservationService {
         return result;
     }
 
+    public Reservation findByHostIdAndGuestId(Host host, Guest guest) throws DataException {
+        if (host == null) {
+            return null;
+        }
+        if (guest == null) {
+            return null;
+        }
+        Reservation reservation = new Reservation();
+            if (reservation.getGuest() == guest
+            && reservation.getHost() == host) {
+                reservation.getGuestId();
+                reservation.getStartDate();
+                reservation.getEndDate();
+
+                return reservation;
+            } else {
+        return reservation;
+    }
+    }
     public Result<Reservation> add(Reservation reservation) throws DataException {
         Result<Reservation> result = validate(reservation);
         if (!result.isSuccess()) {
@@ -56,8 +73,35 @@ public class ReservationService {
         return result;
     }
 
-//    public List<LocalDate> dateRange(LocalDate start, LocalDate end){
-//        return start.datesUntil(end).collect(Collectors.toList()).add(start);
+    public Result<Reservation> update(Reservation reservation) throws DataException {
+        Result<Reservation> result = validate(reservation);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        List<Reservation> exists = reservationRepository.findByHostID(reservation.getHost().getReservationId());
+        if (exists == null) {
+            result.addErrorMessage("Reservation Id: " + reservation.getHost().getReservationId() + " does not exist.");
+        }
+        boolean success = reservationRepository.update(reservation);
+        if (!success) {
+            result.addErrorMessage("Could not find reservation" + reservation.getReservationId());
+        }
+        return result;
+
+    }
+
+    public Result<Reservation> cancelReservation(Reservation reservation) throws DataException {
+        Result<Reservation> result = new Result<Reservation>();
+        if (reservation == null) {
+            result.addErrorMessage("Could not find reservation");
+        }
+        boolean success = reservationRepository.cancelReservation(reservation);
+        if (!success) {
+            result.addErrorMessage("Could not find reservation.");
+        }
+        return result;
+
+    }
 
 
 
@@ -78,7 +122,7 @@ public class ReservationService {
             start = start.plusDays(1);
         } while (!(start.isEqual(end.plusDays(1))));
         result = (hostId.getWeekend_rate().multiply(BigDecimal.valueOf(countWeekend))
-                .add(hostId.getStandard_rate().multiply(BigDecimal.valueOf(countWeekday)))).setScale(2 , RoundingMode.HALF_UP);
+                .add(hostId.getStandard_rate().multiply(BigDecimal.valueOf(countWeekday)))).setScale(2, RoundingMode.HALF_UP);
         return result;
     }
 

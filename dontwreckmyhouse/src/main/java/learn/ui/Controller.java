@@ -60,10 +60,6 @@ public class Controller {
 
     private void viewByHost() throws DataException {
         view.displayHeader(MainMenuOption.VIEW_RESERVATIONS_FOR_HOST.getMessage());
-//        Host host = getHostLocal();
-//        if (host == null) {
-//            return;
-//        }
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
         List<Reservation> reservations = reservationService.findByHostID(host.getReservationId());
@@ -79,7 +75,7 @@ public class Controller {
 
         Reservation reservation = view.makeReservation(host, guest);
         reservation.setGuestId(guest.getGuestId());
-        //need prompt and response for date ranges and total cost
+        //prompt and response for date ranges and total cost
         LocalDate  startDate = view.getStartDate();
         LocalDate endDate = view.getEndDate();
         reservation.setStartDate(startDate);
@@ -87,7 +83,15 @@ public class Controller {
         BigDecimal costOfStay = reservationService.costPerStay(startDate, endDate, host);
         reservation.setTotal(costOfStay);
         view.displayCostSummary(startDate,endDate,costOfStay);
-        //need to see if they accept
+        String confirmation = view.confirmation();
+        {
+            if (confirmation == null) {
+                view.confirmation();
+            }
+            if (confirmation.equalsIgnoreCase("n")) {
+                return;
+            }
+        }
 
         Result<Reservation> result = reservationService.add(reservation);
         if (!result.isSuccess()) {
@@ -98,11 +102,61 @@ public class Controller {
         }
 
     }
-    private void editReservation() {
+    private void editReservation() throws DataException {
+
         view.displayHeader(MainMenuOption.EDIT_RESERVATION.getMessage());
+        String guestEmail = view.getGuestEmail();
+        Guest guest = guestService.findByGuestEmail(guestEmail);
+        String hostEmail = view.getHostEmail();
+        Host host = hostService.findByHostEmail(hostEmail);
+        Reservation reservation = reservationService.findByHostIdAndGuestId(host, guest);
+        view.displayReservation(host,guest,reservation);
+        // ^ reservation needs to be grabbed
+
+        LocalDate newStart = view.editStartofReservation(reservation);
+        if(newStart == null) {
+            newStart = reservation.getStartDate();
+        }
+        LocalDate newEnd = view.editEndofReservation(reservation);
+        reservation.setStartDate(newStart);
+        reservation.setEndDate(newEnd);
+        BigDecimal costOfStay = reservationService.costPerStay(newStart, newEnd, host);
+        reservation.setTotal(costOfStay);
+        view.displayCostSummary(newStart,newEnd,costOfStay);
+        String confirmation = view.confirmation();
+        {
+            if (confirmation == null) {
+                view.confirmation();
+            }
+            if (confirmation.equalsIgnoreCase("n")) {
+                return;
+            }
+        }
+        Result<Reservation> result = reservationService.update(reservation);
+        if (!result.isSuccess()) {
+            view.displayStatus(false, result.getErrorMessages());
+        } else {
+            String successMessage = String.format("Reservation %s has been edited.", result.getPayload().getReservationId());
+            view.displayStatus(true, successMessage);
+        }
     }
-    private void cancelReservation() {
+    private void cancelReservation() throws DataException {
         view.displayHeader(MainMenuOption.CANCEL_RESERVATION.getMessage());
+        String guestEmail = view.getGuestEmail();
+        Guest guest = guestService.findByGuestEmail(guestEmail);
+        String hostEmail = view.getHostEmail();
+        Host host = hostService.findByHostEmail(hostEmail);
+        Reservation reservation = reservationService.findByHostIdAndGuestId(host, guest);
+        view.displayReservation(host,guest,reservation);
+        // ^ reservation needs to be grabbed
+
+        Result<Reservation> result = reservationService.cancelReservation(reservation);
+        if (!result.isSuccess()) {
+            view.displayStatus(false, result.getErrorMessages());
+        } else {
+            String successMessage = String.format("Reservation %s has been canceled.", result.getPayload().getReservationId());
+            view.displayStatus(true, successMessage);
+        }
 
     }
 //support
