@@ -139,7 +139,10 @@ public class View {
     }
     public LocalDate editStartOfReservation(Reservation reservation) {
         io.printf("Start %s:  ",reservation.getStartDate());
-        return io.readLocalDate("Enter desired start date [MM/DD/YYYY]: ");
+        LocalDate newDate = io.readLocalDateNew("Enter new start date [MM/DD/YYYY] or Enter to use original: ");
+        if (newDate == null || newDate.toString().equalsIgnoreCase("")) {
+            return reservation.getStartDate();
+        } return newDate;
 
     }
     public LocalDate editEndOfReservation(Reservation reservation) {

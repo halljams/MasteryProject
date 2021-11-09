@@ -143,9 +143,6 @@ public class Controller {
         view.displayReservation(reservation);
 
         LocalDate newStart = view.editStartOfReservation(reservation);
-        if (newStart == null) {
-            newStart = reservation.getStartDate();
-        }
         LocalDate newEnd = view.editEndOfReservation(reservation);
         reservation.setStartDate(newStart);
         reservation.setEndDate(newEnd);

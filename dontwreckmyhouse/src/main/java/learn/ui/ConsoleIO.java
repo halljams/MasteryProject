@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -46,6 +47,15 @@ public class ConsoleIO {
             println(REQUIRED);
         }
     }
+    public LocalDate readLocalDateNew(String prompt) {
+            String input = readString(prompt);
+            if (Objects.equals(input, "")) {
+                return null;
+            }
+                return LocalDate.parse(input, formatter);
+
+            }
+
 
     public double readDouble(String prompt) {
         while (true) {
