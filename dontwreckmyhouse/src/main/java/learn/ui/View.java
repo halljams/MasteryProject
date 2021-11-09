@@ -163,6 +163,15 @@ public class View {
                 reservation.getGuest().getFirstName(),
                 reservation.getGuest().getGuestEmail());
     }
+    public void displayErrorInPast() {
+        io.println("Cannot cancel reservations that have already occurred.");
+    }
+    public void displayEmailNotFound() {
+        io.println("Email entered is not connected to a registered user.");
+    }
+    public void displayReservationsNotFound() {
+        io.println("No reservations exist for this combination.");
+    }
 
     public void displayHeader(String message) {
         io.println("");

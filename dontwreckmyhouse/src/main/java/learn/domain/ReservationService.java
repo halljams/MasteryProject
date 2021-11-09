@@ -40,6 +40,7 @@ public class ReservationService {
             reservation.setGuest(guestMap.get(reservation.getGuestId()));
             reservation.setHost(hostMap.get(reservation.getHost().getReservationId()));
         }
+
         return result;
     }
 
@@ -91,10 +92,13 @@ public class ReservationService {
 
     public Result<Reservation> cancelReservation(Reservation reservation) throws DataException {
         Result<Reservation> result = new Result<Reservation>();
+
         if (reservation == null) {
             result.addErrorMessage("Could not find reservation");
         }
+
         boolean success = reservationRepository.cancelReservation(reservation);
+
         if (!success) {
             result.addErrorMessage("Could not find reservation.");
         }

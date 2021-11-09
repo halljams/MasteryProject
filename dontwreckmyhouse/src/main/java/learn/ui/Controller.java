@@ -27,16 +27,18 @@ public class Controller {
         this.reservationService = reservationService;
         this.view = view;
     }
+
     public void run() {
         view.displayHeader("Welcome to the Reservation Service");
         try {
             runAppLoop();
 
-        }catch (DataException ex) {
+        } catch (DataException ex) {
             view.displayException(ex);
         }
         view.displayHeader("Goodbye");
     }
+
     private void runAppLoop() throws DataException {
         MainMenuOption option;
         do {
@@ -55,34 +57,47 @@ public class Controller {
                     cancelReservation();
                     break;
             }
-        }while (option!= MainMenuOption.EXIT);
+        } while (option != MainMenuOption.EXIT);
     }
 
     private void viewByHost() throws DataException {
         view.displayHeader(MainMenuOption.VIEW_RESERVATIONS_FOR_HOST.getMessage());
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
+        if (host == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         List<Reservation> reservations = reservationService.findByHostID(host.getReservationId());
         view.displayReservations(reservations);
         view.enterToContinue();
     }
+
     private void makeReservation() throws DataException {
         view.displayHeader(MainMenuOption.MAKE_RESERVATION.getMessage());
         String guestEmail = view.getGuestEmail();
         Guest guest = guestService.findByGuestEmail(guestEmail);
+        if (guest == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
+        if (host == null) {
+            view.displayEmailNotFound();
+            return;
+        }
 
         Reservation reservation = view.makeReservation(host, guest);
         reservation.setGuestId(guest.getGuestId());
         //prompt and response for date ranges and total cost
-        LocalDate  startDate = view.getStartDate();
+        LocalDate startDate = view.getStartDate();
         LocalDate endDate = view.getEndDate();
         reservation.setStartDate(startDate);
         reservation.setEndDate(endDate);
         BigDecimal costOfStay = reservationService.costPerStay(startDate, endDate, host);
         reservation.setTotal(costOfStay);
-        view.displayCostSummary(startDate,endDate,costOfStay);
+        view.displayCostSummary(startDate, endDate, costOfStay);
         String confirmation = view.confirmation();
         {
             if (confirmation == null) {
@@ -102,21 +117,33 @@ public class Controller {
         }
 
     }
+
     private void editReservation() throws DataException {
 
         view.displayHeader(MainMenuOption.EDIT_RESERVATION.getMessage());
         String guestEmail = view.getGuestEmail();
         Guest guest = guestService.findByGuestEmail(guestEmail);
+        if (guest == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
+        if (host == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         List<Reservation> reservations = reservationService.findByHostIdAndGuestId(host, guest);
 
         Reservation reservation = view.chooseReservation(reservations);
+        if (reservation == null) {
+            view.displayReservationsNotFound();
+            return;
+        }
         view.displayReservation(reservation);
-        // ^ reservation needs to be grabbed
 
         LocalDate newStart = view.editStartOfReservation(reservation);
-        if(newStart == null) {
+        if (newStart == null) {
             newStart = reservation.getStartDate();
         }
         LocalDate newEnd = view.editEndOfReservation(reservation);
@@ -124,7 +151,7 @@ public class Controller {
         reservation.setEndDate(newEnd);
         BigDecimal costOfStay = reservationService.costPerStay(newStart, newEnd, host);
         reservation.setTotal(costOfStay);
-        view.displayCostSummary(newStart,newEnd,costOfStay);
+        view.displayCostSummary(newStart, newEnd, costOfStay);
         String confirmation = view.confirmation();
         {
             if (confirmation == null) {
@@ -142,17 +169,32 @@ public class Controller {
             view.displayStatus(true, successMessage);
         }
     }
+
     private void cancelReservation() throws DataException {
         view.displayHeader(MainMenuOption.CANCEL_RESERVATION.getMessage());
         String guestEmail = view.getGuestEmail();
         Guest guest = guestService.findByGuestEmail(guestEmail);
+        if (guest == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         String hostEmail = view.getHostEmail();
         Host host = hostService.findByHostEmail(hostEmail);
+        if (host == null) {
+            view.displayEmailNotFound();
+            return;
+        }
         List<Reservation> reservations = reservationService.findByHostIdAndGuestId(host, guest);
         Reservation reservation = view.chooseReservation(reservations);
+        if (reservation == null) {
+            view.displayReservationsNotFound();
+            return;
+        }
         view.displayReservation(reservation);
-        // ^ reservation needs to be grabbed
-
+        if (reservation.getStartDate().isBefore(LocalDate.now()) || reservation.getEndDate().isBefore(LocalDate.now())) {
+            view.displayErrorInPast();
+            return;
+        }
         Result<Reservation> result = reservationService.cancelReservation(reservation);
         if (!result.isSuccess()) {
             view.displayStatus(false, result.getErrorMessages());
@@ -162,16 +204,18 @@ public class Controller {
         }
 
     }
-//support
-        private Host getHostLocal() {
-            String location = view.getHostwithAidOfPrefixCity();
-            List<Host> hosts = hostService.findByCity(location);
-            return view.chooseLocation(hosts);
-        }
-        private Guest getGuest() {
+
+    //support
+    private Host getHostLocal() {
+        String location = view.getHostwithAidOfPrefixCity();
+        List<Host> hosts = hostService.findByCity(location);
+        return view.chooseLocation(hosts);
+    }
+
+    private Guest getGuest() {
         String lastNamePrefix = view.getGuestLastNamePrefix();
         List<Guest> guests = Collections.singletonList(guestService.findByGuestEmail(lastNamePrefix));
         return view.chooseGuest(guests);
-        }
     }
+}
 
