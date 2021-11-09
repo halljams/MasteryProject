@@ -122,7 +122,7 @@ public class ReservationService {
                 countWeekday++;
             }
             start = start.plusDays(1);
-        } while (!(start.isEqual(end.plusDays(1))));
+        } while (!(start.isEqual(end)));
         result = (hostId.getWeekend_rate().multiply(BigDecimal.valueOf(countWeekend))
                 .add(hostId.getStandard_rate().multiply(BigDecimal.valueOf(countWeekday)))).setScale(2, RoundingMode.HALF_UP);
         return result;

@@ -166,6 +166,9 @@ public class View {
                 reservation.getGuest().getFirstName(),
                 reservation.getGuest().getGuestEmail());
     }
+    public void displayEndBeforeStartDate() {
+        io.println("Start date must be before end date.");
+    }
     public void displayErrorInPast() {
         io.println("Cannot cancel reservations that have already occurred.");
     }

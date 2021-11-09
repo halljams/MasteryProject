@@ -95,6 +95,10 @@ public class Controller {
         LocalDate endDate = view.getEndDate();
         reservation.setStartDate(startDate);
         reservation.setEndDate(endDate);
+        if (startDate.isAfter(endDate)) {
+            view.displayEndBeforeStartDate();
+            return;
+        }
         BigDecimal costOfStay = reservationService.costPerStay(startDate, endDate, host);
         reservation.setTotal(costOfStay);
         view.displayCostSummary(startDate, endDate, costOfStay);
@@ -146,6 +150,10 @@ public class Controller {
         LocalDate newEnd = view.editEndOfReservation(reservation);
         reservation.setStartDate(newStart);
         reservation.setEndDate(newEnd);
+        if (newStart.isAfter(newEnd)) {
+            view.displayEndBeforeStartDate();
+            return;
+        }
         BigDecimal costOfStay = reservationService.costPerStay(newStart, newEnd, host);
         reservation.setTotal(costOfStay);
         view.displayCostSummary(newStart, newEnd, costOfStay);
