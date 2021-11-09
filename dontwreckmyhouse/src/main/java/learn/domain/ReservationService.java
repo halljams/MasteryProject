@@ -12,10 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -83,6 +80,7 @@ public class ReservationService {
         if (exists == null) {
             result.addErrorMessage("Reservation Id: " + reservation.getHost().getReservationId() + " does not exist.");
         }
+
         boolean success = reservationRepository.update(reservation);
         if (!success) {
             result.addErrorMessage("Could not find reservation" + reservation.getReservationId());
@@ -126,6 +124,7 @@ public class ReservationService {
         return result;
     }
 
+
     private Result<Reservation> validate(Reservation reservation) throws DataException {
         Result<Reservation> result = validateNullInput(reservation);
         if (!result.isSuccess()) {
@@ -139,13 +138,32 @@ public class ReservationService {
         if (!result.isSuccess()) {
             return result;
         }
+        validateNotOverlap(reservation, result);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
         String hostID = reservation.getHost().getHostEmail();
         validNotDuplicate(reservation, result, hostID);
         return result;
-
-
     }
+    private void validateNotOverlap(Reservation reservation , Result<Reservation> result) throws DataException {
 
+        List<Reservation>  reservations = reservationRepository.findByHostID(reservation.getHost().getReservationId());
+        LocalDate startReservation = reservation.getStartDate();
+        LocalDate endReservation = reservation.getEndDate();
+        for (Reservation r : reservations) {
+            LocalDate startExisting = r.getStartDate();
+            LocalDate endExisting = r.getEndDate();
+            if (startReservation.isBefore(startExisting) && endReservation.isAfter(startExisting)) {
+                result.addErrorMessage("Dates must not overlap with other reservation dates.");
+            }
+            if (startReservation.isAfter(startExisting) && startReservation.isBefore(endExisting)) {
+                result.addErrorMessage("Dates must not overlap with other reservation dates.");
+            }
+
+        }
+    }
     private Result<Reservation> validateNullInput(Reservation reservation) {
         Result<Reservation> result = new Result<>();
         if (reservation == null) {
@@ -174,6 +192,9 @@ public class ReservationService {
         if (reservation.getStartDate().isAfter(reservation.getEndDate())) {
             result.addErrorMessage("Start date must be before end date.");
         }
+
+
+
     }
 
     private void validateChildrenNotNull(Reservation reservation, Result<Reservation> result) throws DataException {

@@ -3,13 +3,6 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\copyb6ddb844-b990-471a-8c0a-519d0777eb9b.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\data\guests.csv">
           <value>
             <Attribute>
@@ -31,27 +24,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\reservation-test\MMMKMAKLNS.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\reservation-test\NKLNL-KNSADN-KNASDON-89u9.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\reservation-test\NKLNL-KNSADN-KNASDON.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\reservation-test\guest-test.csv">
           <value>
             <Attribute>
@@ -66,21 +38,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\reservation-test\null.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\reservation-test\reservation-creation-test.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\reservation-test\test.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
